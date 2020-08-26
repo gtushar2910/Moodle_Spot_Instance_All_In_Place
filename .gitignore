@@ -1,0 +1,5 @@
+/.terraform
+/secret_access_data.txt
+/secret_data.txt
+/terraform.tfstate
+/terraform.tfstate.backup
