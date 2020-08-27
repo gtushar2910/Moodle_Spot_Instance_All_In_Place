@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 2m
+sleep 1m
 sudo su - root
 apt-get update
 apt-get install -y nginx
@@ -10,7 +10,7 @@ apt-get install -y php7.4-fpm php7.4-common php7.4-mysql php7.4-gmp php7.4-curl 
 cd /var/www/
 git clone -b MOODLE_39_STABLE git://git.moodle.org/moodle.git moodle
 wget https://terraform-triple5.s3.amazonaws.com/moodle -P /etc/nginx/sites-available/
-sed -i "s/server_name  moodle.triple5.in;/server_name  ${url};/g" /etc/php/7.4/fpm/php.ini
+sed -i "s/server_name  moodle.triple5.in;/server_name  ${url};/g" /etc/nginx/sites-available/moodle
 ln -s /etc/nginx/sites-available/moodle /etc/nginx/sites-enabled/
 systemctl restart nginx.service
 chown -R www-data:www-data /var/www/
