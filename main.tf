@@ -121,13 +121,12 @@ data "template_file" "script" {
 resource "aws_spot_instance_request" "Moodle-Spot-AllInOne" {
 
   ami                             = var.ami
-  instance_type                   = "t3a.medium"
+  instance_type                   = var.instance_type
   availability_zone               = "us-east-1a"
   key_name                        = var.key_name
   spot_price                      = "0.05"
   wait_for_fulfillment            = "true"
-  spot_type                       = "one-time"
-  instance_interruption_behaviour = "terminate"
+  instance_interruption_behaviour = "stop"
 
   network_interface {
     device_index         = 0
@@ -137,7 +136,7 @@ resource "aws_spot_instance_request" "Moodle-Spot-AllInOne" {
   user_data = data.template_file.script.rendered
 
   tags = {
-    name = "Moodle_Server"
+    name = "Moodle-Server"
   }
 }
 

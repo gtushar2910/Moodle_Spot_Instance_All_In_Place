@@ -13,12 +13,14 @@ wget https://terraform-triple5.s3.amazonaws.com/moodle -P /etc/nginx/sites-avail
 sed -i "s/server_name  moodle.triple5.in;/server_name  ${url};/g" /etc/nginx/sites-available/moodle
 ln -s /etc/nginx/sites-available/moodle /etc/nginx/sites-enabled/
 systemctl restart nginx.service
+
 chown -R www-data:www-data /var/www/
 chmod -R 755 /var/www/
+
 mkdir /var/moodledata
 chown -R www-data:www-data /var/moodledata/
 chmod -R 755 /var/moodledata/
-echo "request_terminate_timeout = 360" >>/etc/php/7.4/fpm/pool.d/www.conf
+echo "request_terminate_timeout = 360" >> /etc/php/7.4/fpm/pool.d/www.conf
 
 apt-get install -y mariadb-server mariadb-client
 systemctl enable mariadb.service

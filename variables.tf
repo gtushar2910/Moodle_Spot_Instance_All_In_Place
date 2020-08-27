@@ -43,3 +43,7 @@ variable "moodleuser"{
 variable "moodlepwd"{
   description = "Moodle Pwd"
 }
+
+variable "instance_type"{
+  description = "Instance Type"
+}
