@@ -81,3 +81,6 @@ sed -i "s/\$CFG->wwwroot   = 'https:\/\/www.scetitmoodle.tech';/\$CFG->wwwroot  
 
 snap install --classic certbot
 certbot --nginx --agree-tos --no-eff-email --email ${email} -d ${url}
+
+echo "* * * * * /usr/bin/php  /var/www/moodle/admin/cli/cron.php >/dev/null" > mycron 
+crontab -u www-data mycron
