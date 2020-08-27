@@ -10,10 +10,14 @@ apt-get install -y php7.4-fpm php7.4-common php7.4-mysql php7.4-gmp php7.4-curl 
 cd /var/www/
 git clone -b MOODLE_39_STABLE git://git.moodle.org/moodle.git moodle
 wget https://terraform-triple5.s3.amazonaws.com/moodle -P /etc/nginx/sites-available/
+sed -i "s/server_name  moodle.triple5.in;/server_name  ${url};/g" /etc/php/7.4/fpm/php.ini
 ln -s /etc/nginx/sites-available/moodle /etc/nginx/sites-enabled/
 systemctl restart nginx.service
 chown -R www-data:www-data /var/www/
 chmod -R 755 /var/www/
+mkdir /var/moodledata
+chown -R www-data:www-data /var/moodledata/
+chmod -R 755 /var/moodledata/
 echo "request_terminate_timeout = 360" >>/etc/php/7.4/fpm/pool.d/www.conf
 
 apt-get install -y mariadb-server mariadb-client
@@ -64,6 +68,16 @@ MYSQL=`which mysql`
 $MYSQL -uroot -p${root_password} -e "CREATE DATABASE IF NOT EXISTS ${moodledb};"
 $MYSQL -uroot -p${root_password} -e "GRANT ALL ON *.* TO '${moodleuser}'@'localhost' IDENTIFIED BY '${moodlepwd}';"
 $MYSQL -uroot -p${root_password} -e "FLUSH PRIVILEGES;"
+
+sed '/#skip-external-locking/a innodb_file_format = Barracuda \n innodb_file_per_table = 1 \n innodb_large_prefix = ON' /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i 's/max_execution_time = 30/max_execution_time = 360/g' /etc/php/7.4/fpm/php.ini
+wget https://terraform-triple5.s3.amazonaws.com/config.php -P /var/www/moodle/
+
+sed -i 's/max_execution_time = 30/max_execution_time = 360/g' /etc/php/7.4/fpm/php.ini
+sed -i "s/\$CFG->dbname    = 'moodle';/\$CFG->dbname    = '${moodledb}';/g" /var/www/moodle/config.php
+sed -i "s/\$CFG->dbuser    = 'moodleuser';/\$CFG->dbuser    = '${moodleuser}';/g" /var/www/moodle/config.php
+sed -i "s/\$CFG->dbpass    = 'Admin@2020';/\$CFG->dbpass    = '${moodlepwd}';/g" /var/www/moodle/config.php
+sed -i "s/\$CFG->wwwroot   = 'https:\/\/www.scetitmoodle.tech';/\$CFG->wwwroot   = 'https:\/\/${url}';/g" /var/www/moodle/config.php
 
 snap install --classic certbot
 certbot --nginx --agree-tos --no-eff-email --email ${email} -d ${url}
