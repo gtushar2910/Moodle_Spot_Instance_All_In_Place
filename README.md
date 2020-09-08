@@ -28,7 +28,7 @@ terraform apply -var-file=../vars/variables.tfvars
 
 ## Post-Install
 
-It will take about 15 minutes to complete the installation of BigBlueButton Server. Once the BigBlueButton Server is installaed, you can access it via the URL that you have provided in the variables.tfvars file (i.e. bbb.example.com in this case).
+It will take about 5 to 10 minutes to complete the installation of Moodle Server. Once the Moodle Server is installaed, you can access it via the URL that you have provided in the variables.tfvars file (i.e. moodle.example.com in this case).
 
 ## Remove
 
