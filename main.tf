@@ -124,7 +124,7 @@ resource "aws_spot_instance_request" "Moodle-Spot-AllInOne" {
   instance_type                   = var.instance_type
   availability_zone               = "us-east-1a"
   key_name                        = var.key_name
-  spot_price                      = "0.05"
+  spot_price                      = var.spot_price
   wait_for_fulfillment            = "true"
   instance_interruption_behaviour = "stop"
 

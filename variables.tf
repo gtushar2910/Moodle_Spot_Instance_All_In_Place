@@ -47,3 +47,7 @@ variable "moodlepwd"{
 variable "instance_type"{
   description = "Instance Type"
 }
+
+variable "spot_price"{
+  description = "Spot Price"
+}
